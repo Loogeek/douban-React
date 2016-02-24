@@ -12,7 +12,7 @@ var express = require('express'),					          	// 加载express模块
     port = process.env.PORT || 3000,                  // 设置监听端口
     app = express(),                                  // 生成Web服务器实例
 
-    dbUrl = 'mongodb://127.0.0.1/imooc';              // 连接本地数据库及数据库名称
+    dbUrl = 'mongodb://127.0.0.1/douban';              // 连接本地数据库及数据库名称
 
 mongoose.connect(dbUrl);
 
@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(session({
-	secret:'imooc',
+	secret:'douban',
 	resave: false,
 	saveUninitialized: true,
 	// 使用mongo对session进行持久化，将session存储进数据库中

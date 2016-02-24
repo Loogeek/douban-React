@@ -30,7 +30,7 @@ export class NewAlbums extends React.Component {
       <div>
         <div className="class-top">
           <span>新碟榜</span>
-          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={this.getData.bind(this)} />
+          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
           <a href={titleMore} target="_blank" className="more">更多</a>
         </div>
         <div className="screen">
@@ -47,13 +47,13 @@ export class NewAlbums extends React.Component {
   }
   getData(value) {
     let url = this.props.source + encodeURIComponent('新碟榜' + value);
-    $.get(url, function(results) {
+    $.get(url, (results) => {
       this.setState({
         loading: false,
         selected: value,
         data: results.data
       });
-    }.bind(this));
+    });
   }
 }
 /* 新碟榜整体区域组件--End */

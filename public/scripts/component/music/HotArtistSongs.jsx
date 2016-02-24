@@ -6,6 +6,7 @@ import TitleTop from './TitleTop.jsx';
 export class HotArtistSongs extends React.Component {
   constructor() {
     super();
+    // this.getData = () => this.getData();
     this.state = {
       selected: '最热',
       loading: true,
@@ -35,7 +36,7 @@ export class HotArtistSongs extends React.Component {
           </button>
         </div>
         <div className="billboard-bd class-top">
-          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={this.getData.bind(this)} />
+          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
         </div>
         <div className="hotArtist-songs">
           <ul>
@@ -51,13 +52,13 @@ export class HotArtistSongs extends React.Component {
   }
   getData(value) {
     let url = this.props.source + encodeURIComponent('本周单曲榜' + value);
-    $.get(url, function(results) {
+    $.get(url, (results) => {
       this.setState({
         loading: false,
         selected: value,
         data: results.data
       });
-    }.bind(this));
+    });
   }
 }
 /* 本周单曲榜整体区域组件--End */

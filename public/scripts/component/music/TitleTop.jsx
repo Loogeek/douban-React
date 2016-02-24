@@ -8,15 +8,15 @@ export class TitleTop extends React.Component {
         titleTop = this.props.titleTop,          // 获取父组件全部标题名称
         titleList = [];
 
-    titleTop.forEach(function(titleItem, index) {
+    titleTop.forEach((titleItem, index) => {
       titleList.push(
         <li className={titleSelected === titleItem ? 'on' : ''} key={index}>
-          <a href="javascript:;" onClick={this.handleTitleChang.bind(this,titleItem)}>
+          <a href="javascript:;" onClick={e => this.handleTitleChang(titleItem)}>
             {titleItem}
           </a>
         </li>
       );
-    }.bind(this));
+    });
     return (
       <ul>
         {titleList}

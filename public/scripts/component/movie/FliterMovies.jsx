@@ -17,7 +17,7 @@ export class FliterMovies extends React.Component {
     if(!this.state.loading) {
       let data = this.state.data;
       if (data && data.movies) {
-        data.movies.forEach(function(movieItem, index) {
+        data.movies.forEach((movieItem, index) => {
           filmList.push(
             <FliterMovieItem data = {movieItem} key = {index} />
           );
@@ -32,7 +32,7 @@ export class FliterMovies extends React.Component {
           <span>选电视剧</span>
           <hr />
           <FliterTitle filmTitle = {this.state.filmTitle} selected = {this.state.selected}
-            onDataChange = {this.getData.bind(this)}/>
+            onDataChange = {e => this.getData(e)}/>
           <hr />
         </div>
         <div className = "screen">
@@ -51,13 +51,13 @@ export class FliterMovies extends React.Component {
   }
   getData(value) {
     let url = this.props.source + encodeURIComponent(value + '电影');
-    $.get(url, function(results) {
+    $.get(url, (results) => {
       this.setState({
         loading: false,
         selected: value,
         data: results.data
       });
-    }.bind(this));
+    });
   }
 }
 /* 选电影/选电视剧区域整体组件--End */
@@ -91,17 +91,17 @@ export class FliterTitle extends React.Component {
         filmTitle = this.props.filmTitle,          // 获取父组件全部标题名称
         titleList = [];
 
-    filmTitle.forEach(function(filmItem, index) {
+    filmTitle.forEach((filmItem, index) => {
       titleList.push(
         <li key = {index}>
           <button
             className = {titleSeleted === filmItem ? 'btn btn-primary' : 'btn btn-default'}
-            key = {index} onClick = {this.handleTitleChang.bind(this,filmItem)}>
+            key = {index} onClick = {e => this.handleTitleChang(filmItem)}>
             {filmItem}
           </button>
         </li>
       );
-    }.bind(this));
+    });
     return (
       <ul>
         {titleList}

@@ -6,11 +6,15 @@ var webpack = require('webpack'),
 
 module.exports = {
   entry: {
-    'movieBundle': './public/scripts/component/movie/FliterMovies.jsx',
+    'movieBundle': [
+      './public/scripts/component/movie/FliterMovies.jsx',
+      './public/scripts/js/movie/movie_index.js'
+    ],
     'musicBundle': [
       './public/scripts/component/music/NewAlbums.jsx',
       './public/scripts/component/music/HotArtistSongs.jsx',
-      './public/scripts/component/music/HotProgrammes.jsx'
+      './public/scripts/component/music/HotProgrammes.jsx',
+      './public/scripts/js/music/music_index.js'
     ]
   },
   output: {
@@ -33,10 +37,10 @@ module.exports = {
     // 使用插件将组件中相同部分抽成一个单独文件
     new CommonsChunkPlugin('componentInit.js', ['movieBundle', 'musicBundle']),
     // 代码压缩
-    // new uglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // })
+    new uglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ]
 }

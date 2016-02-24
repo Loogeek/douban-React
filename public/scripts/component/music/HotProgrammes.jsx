@@ -18,8 +18,8 @@ export class HotProgrammes extends React.Component {
         titleTop = ['最热','流行','摇滚','民谣','原生'];
     if(!this.state.loading) {
       let dataCars = this.state.data;
-      var titleMore = "/music/results?pro="+ this.state.dataPro._id +"&p=0";
       if (dataCars) {
+        var titleMore = "/music/results?pro="+ this.state.dataPro._id +"&p=0";
         for(let i = 0,len = dataCars.length; i < Math.min(6,len); i++){
           programmeList.push(
             <ProgrammeItem dataCars={dataCars[i]} key={i} />
@@ -31,7 +31,7 @@ export class HotProgrammes extends React.Component {
       <div>
         <div className="class-top">
           <span>近期热门歌单</span>
-          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={this.getData.bind(this)} />
+          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
           <a href={titleMore} target="_blank" className="more">更多</a>
         </div>
         <div className="screen">
@@ -48,14 +48,14 @@ export class HotProgrammes extends React.Component {
   }
   getData(value) {
     let url = this.props.source + encodeURIComponent('近期热门歌单' + value);
-    $.get(url, function(results) {
+    $.get(url, (results) => {
       this.setState({
         loading: false,
         selected: value,
         data: results.data,
         dataPro: results.dataPro
       });
-    }.bind(this));
+    });
   }
 }
 /* 近期热门歌单分类组件--End */
