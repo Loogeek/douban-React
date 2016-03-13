@@ -42,8 +42,8 @@ $(function() {
   // 获取影院列表删除按钮类名，当点击删除按钮触发删除事件
   $('.citydel').click(function(e) {
     var target = $(e.target),
-        id = target.data('id'),  // 获取点击的id值
-        tr = $('.item-id-' + id);// 获取点击删除按钮所在行
+        id = target.data('id'),  												// 获取点击的id值
+        tr = $('.item-id-' + id);												// 获取点击删除按钮所在行
 
     $.ajax({
       type : 'DELETE',
