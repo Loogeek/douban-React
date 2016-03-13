@@ -1,10 +1,14 @@
-var Category = require('../../models/movie/movie_category');    // 电影分类数据模型
+"use strict";
+
+var mongoose = require('mongoose'),
+		Category = mongoose.model('Category'); 	  						// 电影分类模型
 
 // 新建电影分类控制器
 exports.new = function(req, res) {
   res.render('movie/movie_category_admin', {
-    title: '豆瓣电影后台分类录入页',
-    category: {}
+    title:'豆瓣电影后台分类录入页',
+		logo:'movie',
+    category:{}
   });
 };
 
@@ -12,17 +16,17 @@ exports.new = function(req, res) {
 exports.save = function(req, res) {
   var category = req.body.category;
   // 判断新创建的电影分类是否已存在，避免重复输入
-  Category.findOne({name: category.name}, function(err, _category) {
+  Category.findOne({name:category.name}, function(err, _category) {
     if(_category) {
       console.log('电影分类已存在');
-      res.redirect('/admin/movie/category/list');
+      res.redirect('/admin/movie/movieCategory/list');
     }else {
-      var category = new Category(category);
-      category.save(function(err, category) {
+      var newCategory = new Category(category);
+      newCategory.save(function(err) {
         if (err) {
           console.log(err);
         }
-        res.redirect('/admin/movie/category/list');
+        res.redirect('/admin/movie/movieCategory/list');
       });
     }
   });
@@ -42,6 +46,7 @@ exports.list = function(req, res) {
       }
       res.render('movie/movie_category_list',{
         title:'豆瓣电影分类列表页',
+				logo:'movie',
         categories:categories
       });
     });
@@ -53,7 +58,7 @@ exports.del = function(req,res) {
   var id  = req.query.id;
   if(id) {
     // 如果id存在则服务器中将该条数据删除并返回删除成功的json数据
-    Category.remove({_id:id},function(err,category) {
+    Category.remove({_id:id},function(err) {
       if(err) {
           console.log(err);
       }

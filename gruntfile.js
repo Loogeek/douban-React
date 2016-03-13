@@ -1,74 +1,104 @@
-module.exports = function(grunt) {
+'use strict';
 
-  grunt.initConfig({  //定义的任务
+module.exports = function(grunt) {
+  require('load-grunt-tasks')(grunt);       // 加载全部grunt插件
+
+  grunt.initConfig({                        // 定义的任务
     watch: {
       jade: {
-        files: ['views/**'],
-        options: {
-          livereload: true
-        }
+        files: ['views/**']
       },
       js: {
-        files: ['public/js/**', 'models/**/*.js', 'schemas/**/*.js'],
-        //tasks: ['jshint'],
-        options: {
-          livereload: true   //文件改动重新启动服务
-        }
-      },
-      uglify: {
-        files: ['public/**/*.js'],
-        tasks: ['jshint'],
-        options: {
-          livereload: true
-        }
+        files: ['public/scripts/js/**', 'test/**', 'app/**/*.js'],
+        tasks: ['jshint']
       },
       styles: {
-        files: ['public/sass/*.scss','public/sass/**/*.scss'],
-        tasks: ['sass'],
-        options: {
-          nospawn: true
-        }
+        files: ['public/sass/**'],
+        tasks: ['sass', 'cssmin']
+      },
+      uglify: {
+        files: ['public/scripts/js/**'],
+        tasks: ['uglify']
       }
     },
-    //检查文件语法等问题
+    // 检查文件语法等问题
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        ignores: ['public/libs/**/*.js']
+        ignores: ['node_modules/**']
       },
-      all: ['public/js/**/*.js', 'test/**/*.js', 'app/**/*.js']
+      build: ['public/scripts/js/**', 'test/**', 'app/**/*.js']
     },
+    // Sass编译
     sass: {
-      dist: {
-        files: {
-          'public/css/music/music_index.css': 'public/sass/music/music_index.scss',
-          'public/css/movie/movie_index.css': 'public/sass/movie/movie_index.scss',
-          'public/css/header.css': 'public/sass/header.scss',
-        }
+      dist: {                                      // 编译任务
+        options: {
+          style: 'compact',                        // CSS输出格式
+          sourcemap: 'none',                       // 取消sourcemap
+          update: true,                            // 仅对改变的Sass执行编译
+          cacheLocation: 'public/sass/.sass-cache' // sass编译缓存存储路径
+        },
+        files: [{
+          expand: true,
+          cwd: 'public/sass/',                     // sass路径
+          src: ['*.scss', '**/*.scss'],            // 执行编译sass文件
+          dest: 'public/css/',                     // 输出CSS路径
+          ext: '.css'                              // CSS文件格式
+        }]
       }
     },
+    // js压缩
     uglify: {
       development: {
-        files: {
-          'public/build/admin.min.js': 'public/js/admin.js',
-          'public/build/detail.min.js': [
-            'public/js/detail.js'
-          ]
-        }
+        options: {
+          report: 'gzip'                            // 采用gzip压缩
+        },
+        files: [{
+          expand: true,
+          cwd: 'public/scripts/js/',
+          src: ['*.js', '**/*.js'],
+          dest: 'public/libs/scripts/js/',
+          ext: '.min.js'
+        }]
       }
     },
-
+    // css压缩
+    cssmin: {
+      options: {
+        report: 'gzip'                            // 采用gzip压缩
+      },
+      target: {
+        files: [{
+          expand: true,
+          cwd: 'public/css/',
+          src: ['*.css', '**/*.css'],
+          dest: 'public/libs/css',
+          ext: '.min.css'
+        }]
+      }
+    },
+    // 图片压缩
+    imagemin: {
+      dist: {
+        options: {
+            optimizationLevel: 3          //定义 PNG 图片优化水平
+        },
+        files: [{
+            expand: true,
+            cwd: 'public/images/',
+            src: ['**/*.{png,jpg,jpeg,ico}'], // 优化 img 目录下所有 png/jpg/jpeg/ico 图片
+            dest: 'public/libs/images'
+        }]
+      }
+    },
     nodemon: {
       dev: {
-        script: 'app.js',  //Script that nodemon runs and restarts when changes are detected.
+        script: 'app.js',                      // 执行文件
         options: {
-          //file: 'app.js',
-          args: [],
-          ignoredFiles: ['README.md', 'node_modules/**', '.DS_Store'],
-          watchedExtensions: ['js'],
-          watchedFolders: ['./'],
+          ignore: ['README.md', 'node_modules/**', '.DS_Store'],
+          ext: 'js',
           debug: true,
-          delayTime: 1,
+          delay: 1,
           env: {
             PORT: 3000
           },
@@ -76,34 +106,25 @@ module.exports = function(grunt) {
         }
       }
     },
-
+    // 测试任务
     mochaTest:{
       options:{
-        reporter:'spec',
+        reporter:'spec',                      // 测试报告的格式
       },
       src:['test/**/*.js']
     },
-
+    // 并行执行任务
     concurrent: {
-      tasks: ['nodemon', 'watch', 'sass', 'uglify', 'jshint'],
+      tasks: ['jshint', 'sass', 'uglify', 'cssmin', 'imagemin', 'watch', 'nodemon'],
       options: {
         logConcurrentOutput: true
       }
     }
-  })
+  });
 
-  grunt.option('force', true) //便于开发时不要因为某些语法错误中断整个任务
+  grunt.option('force', true)                 // 便于开发时不要因为某些语法错误中断整个任务
 
-  // 加载插件
-  grunt.loadNpmTasks('grunt-contrib-watch');  //监控文件变化，主要检测文件有变化就会重新执行里面监控的任务
-  grunt.loadNpmTasks('grunt-nodemon');  //实时监听入口文件（app.js)
-  grunt.loadNpmTasks('grunt-concurrent');//针对慢任务  如Sass、优化构建时间，跑多个阻塞任务
-  grunt.loadNpmTasks('grunt-mocha-test'); //单元测试模块
-  grunt.loadNpmTasks('grunt-contrib-uglify');//JS压缩
-  grunt.loadNpmTasks('grunt-contrib-jshint');//用于检测文件格式、语法等问题模块
-  grunt.loadNpmTasks('grunt-contrib-sass'); //使用Sass构建模块
-  //注册默认任务
+  // 注册默认任务
   grunt.registerTask('default', ['concurrent']);
-
-  grunt.registerTask('test', ['mochaTest']);   //单元测试任务
+  grunt.registerTask('test', ['mochaTest']);  // 单元测试任务
 }

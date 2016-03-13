@@ -12,31 +12,32 @@ var express = require('express'),					          	// 加载express模块
     port = process.env.PORT || 3000,                  // 设置监听端口
     app = express(),                                  // 生成Web服务器实例
 
-    dbUrl = 'mongodb://127.0.0.1/douban';              // 连接本地数据库及数据库名称
+    dbUrl = 'mongodb://127.0.0.1/douban';             // 连接本地数据库及数据库名称
 
 mongoose.connect(dbUrl);
 
 // models loading
-var models_path = __dirname + '/app/models';
+var models_path = __dirname + '/app/models';           // 加载模型所在路径
+
+// 路径加载函数，加载各模型的路径,所以可以直接通过mongoose.model加载各模型 这样即使模型路径改变也无需更改路径
 var walk = function(path) {
   fs
     .readdirSync(path)
     .forEach(function(file) {
       var newPath = path + '/' + file;
       var stat = fs.statSync(newPath);
-
+      // 如果是文件
       if (stat.isFile()) {
         if (/(.*)\.(js|coffee)/.test(file)) {
           require(newPath);
         }
-      }
-      else if (stat.isDirectory()) {
+      // 如果是文件夹则继续遍历
+      }else if (stat.isDirectory()) {
         walk(newPath);
       }
-    })
+    });
 }
 walk(models_path);
-
 
 app.set('views','./app/views/pages');                   // 视图文件根目录
 app.set('view engine','jade');                          // 设置模板引擎
