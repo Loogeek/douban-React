@@ -1,24 +1,24 @@
 "use strict";
-// 引入选电影/选电视剧React组件
-import FliterMovies from './FliterMovies';
+
+import FliterMovies from './FliterMovies';							// 引入选电影/选电视剧React组件
 
 $.support.cors = true;                                  // 解决IE8/9 Ajax跨域请求问题
 
 $(function() {
   // 电影主页函数
   var movieIndexFun = (function() {
-    var oCol6_width = $('.col-md-6').width();            // 获取主页左边区域布局对象
+    var oCol6_width = $('.col-md-6').width();           // 获取主页左边区域布局对象
     /*
-        即将上映和正在上映点击切换事件
+      即将上映和正在上映点击切换事件
     */
     var gallerySwitch = (function() {
-      var $oPanel = $('#scrollMoives .panel'),           // 获取顶部轮播图面板对象
+      var $oPanel = $('#scrollMoives .panel'),          // 获取顶部轮播图面板对象
           $oTitle = $('#headerNow span'),               // 获取即将上映标题对象
-          page = 1,                                      // 初始页码
+          page = 1,                                     // 初始页码
           $oLeft = $('#scrollMoives .slide-prev'),      // 获取左箭头按钮
-          $oRight = $('#scrollMoives .slide-next'),      // 获取右箭头按钮
+          $oRight = $('#scrollMoives .slide-next'),     // 获取右箭头按钮
           $oThumbnail = $('#scrollMoives .thumbnail'),  // 获取电影对象
-          len = $oThumbnail.length,                      // 即将电影轮播展示区电影总数
+          len = $oThumbnail.length,                     // 即将电影轮播展示区电影总数
           pageTotal = Math.ceil(len / 4);               // 即将电影轮播展示区总页数
       // 设置两个电影展示区总页数
       $('#scrollMoives .side-max').html(pageTotal);
@@ -158,11 +158,11 @@ $(function() {
      */
     var galleryFrames = (function(){
       var page = 1,                                     // 页码变量
-          $oLeft = $('#galleryFrames .slide-prev'),      // 向左箭头
+          $oLeft = $('#galleryFrames .slide-prev'),     // 向左箭头
           $oRight = $('#galleryFrames .slide-next'),    // 向右箭头
           len = $('#galleryFrames li').length,          // 热门推荐轮播图片数量
           $oUl = $('#galleryFrames ul'),                // 获取轮播图列表的对象
-          $oItem = $('#galleryFrames .slide-item');      // 获取展示区对象
+          $oItem = $('#galleryFrames .slide-item');     // 获取展示区对象
       // 设置轮播图总数量，因为在轮播图首位各有一张附属图，所以总数量要减去2张
       $('#galleryFrames .side-max').html(len-2);
 
@@ -201,17 +201,17 @@ $(function() {
 
             if(page === len - 1){
               page = 1;
-              $('#galleryFrames .side-index').html(page);      //设置当前页码
+              $('#galleryFrames .side-index').html(page);    //设置当前页码
               $oUl.animate({left:-oCol6_width+'px'},0);
             }
           }else{
             page--;
-            $('#galleryFrames .side-index').html(page);       //设置当前页码
+            $('#galleryFrames .side-index').html(page);      //设置当前页码
             $oUl.animate({left:'+='+oCol6_width},500);
 
             if(page === 0){
               page = len - 2;
-              $('#galleryFrames .side-index').html(page);      //设置当前页码
+              $('#galleryFrames .side-index').html(page);    //设置当前页码
               $oUl.animate({left:-(oCol6_width * (len -2))+'px'},0);
             }
           }
@@ -223,11 +223,11 @@ $(function() {
         电影院搜索
     */
     var cinemasSearch = (function(){
-      var $city = $('#citySearch'),                            // 电影院所在城市
+      var $city = $('#citySearch'),                           // 电影院所在城市
           $cList = $('#citiesList'),                          // 全国各城市名称列表
-          $citySug = $('#citySug'),                            // 电影院对象
+          $citySug = $('#citySug'),                           // 电影院对象
           $citySugList = $('#citySug .city-suggestion-list'), // 电影院名称列表对象
-          $cityTip = $('#citySug .auto-tip'),                  // 可售票影院列表ul对象
+          $cityTip = $('#citySug .auto-tip'),                 // 可售票影院列表ul对象
           $citySugInput = $('#citySug input');                // 可售票影院搜索框对象
       // 设置可售票影院列表宽度
       $cList.outerWidth($city.width() + $citySug.width());
@@ -251,9 +251,9 @@ $(function() {
 
       // 切换当前城市事件
       $('#citiesList .cities-list-item').on('click','a',function() {
-        $city.children('span').html($(this).html());    // 点击城市名替换默认的广州城市
-        $cList.css('display','none');                    // 城市列表隐藏
-        $citySugInput.val('');                           // 每次切换城市时搜索框中关键字清空
+        $city.children('span').html($(this).html());    		// 点击城市名替换默认的广州城市
+        $cList.css('display','none');                    		// 城市列表隐藏
+        $citySugInput.val('');                           		// 每次切换城市时搜索框中关键字清空
       });
 
       // 电影院搜索框获得焦点时发送Ajax请求该城市的电影院

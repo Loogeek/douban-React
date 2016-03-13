@@ -6,7 +6,6 @@ import TitleTop from './TitleTop.jsx';
 export class HotArtistSongs extends React.Component {
   constructor() {
     super();
-    // this.getData = () => this.getData();
     this.state = {
       selected: '最热',
       loading: true,

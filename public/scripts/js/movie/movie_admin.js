@@ -1,13 +1,13 @@
 "use strict";
 
-$.support.cors = true;																	// 解决IE8/9 Ajax跨域请求问题
+$.support.cors = true;                                  // 解决IE8/9 Ajax跨域请求问题
 
 $(function() {
   // 获取电影列表删除按钮类名，当点击删除按钮触发删除事件
   $('.movieDel').click(function(e) {
-  	var target = $(e.target),
-        id = target.data('id'),  // 获取点击的id值
-        tr = $('.item-id-' + id);// 获取点击删除按钮所在行
+    var target = $(e.target),
+        id = target.data('id'),  												// 获取点击的id值
+        tr = $('.item-id-' + id);												// 获取点击删除按钮所在行
 
     $.ajax({
       type : 'DELETE',
@@ -24,8 +24,8 @@ $(function() {
   // 获取电影分类列表删除按钮类名，当点击删除按钮触发删除事件
   $('.ctyDel').click(function(e) {
     var target = $(e.target),
-        id = target.data('id'),  // 获取点击的id值
-        tr = $('.item-id-' + id);// 获取点击删除按钮所在行
+        id = target.data('id'),  												// 获取点击的id值
+        tr = $('.item-id-' + id);												// 获取点击删除按钮所在行
 
     $.ajax({
       type: 'DELETE',
@@ -70,19 +70,19 @@ $(function() {
         jsonp: 'callback'
       })
       .done(function(data) {
-        $('#inputTitle').val(data.title);									// 标题
-        $('#inputAka').val(data.aka[0]);									// 又名
-        $('#inputYear').val(data.year);										// 上映时间
-        $('#inputSummary').val(data.summary);							// 简介
-        $('#inputCountry').val(data.countries[0]);				// 上映城市
+        $('#inputTitle').val(data.title);                 // 标题
+        $('#inputAka').val(data.aka[0]);                  // 又名
+        $('#inputYear').val(data.year);                   // 上映时间
+        $('#inputSummary').val(data.summary);             // 简介
+        $('#inputCountry').val(data.countries[0]);        // 上映城市
         if(data.rating) {
-          $('#inputRating').val(data.rating.average);			// 豆瓣评分
+          $('#inputRating').val(data.rating.average);     // 豆瓣评分
         }
         if(data.images) {
-          $('#inputPoster').val(data.images.large);				// 电影海报
+          $('#inputPoster').val(data.images.large);       // 电影海报
         }
         if(data.directors) {
-          $('#inputDoctor').val(data.directors[0].name);	// 导演
+          $('#inputDoctor').val(data.directors[0].name);  // 导演
         }
         // 主演
         if(data.casts) {

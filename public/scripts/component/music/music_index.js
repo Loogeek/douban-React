@@ -1,9 +1,9 @@
 "use strict";
-import NewAlbums from './NewAlbums';          // 引入新碟榜React组件
-import HotArtistSongs from './HotArtistSongs';// 引入本周单曲榜组件
-import HotProgrammes from './HotProgrammes';	// 引入近期热门歌单组件
+import NewAlbums from './NewAlbums';          					// 引入新碟榜React组件
+import HotArtistSongs from './HotArtistSongs';					// 引入本周单曲榜组件
+import HotProgrammes from './HotProgrammes';  					// 引入近期热门歌单组件
 
-$.support.cors = true;																	// 解决IE8/9 Ajax跨域请求问题
+$.support.cors = true;                                  // 解决IE8/9 Ajax跨域请求问题
 
 $(function() {
   // 音乐主页函数
@@ -12,16 +12,16 @@ $(function() {
     /*
       顶部轮播图区 #galleryFrames
     */
-    var galleryFrames = (function() {
-      var page = 1,   																			 // 页码变量
-          $oLeft = $('#galleryFrames .slide-prev'),					 // 向左箭头
-          $oRight = $('#galleryFrames .slide-next'),				 // 向右箭头
-          $oUl = $('#galleryFrames .gallery-hot ul'),				 // 获取轮播图列表对象
+    var galleryFrames = (function(){
+      var page = 1,                                          // 页码变量
+          $oLeft = $('#galleryFrames .slide-prev'),          // 向左箭头
+          $oRight = $('#galleryFrames .slide-next'),         // 向右箭头
+          $oUl = $('#galleryFrames .gallery-hot ul'),        // 获取轮播图列表对象
           len = $('#galleryFrames .slide-content li').length,// 总共热门推荐轮播图数量
-          $oDots = $('#galleryFrames .slide-dots');  				 // 获取轮播图滑动点列表对象
+          $oDots = $('#galleryFrames .slide-dots');          // 获取轮播图滑动点列表对象
 
-      $oUl.width(oCol6_width * len);  											 //设置热门推荐区轮播图片的总宽度
-      $('#galleryFrames img').width(oCol6_width);						 // 设置每张轮播图片li的宽度
+      $oUl.width(oCol6_width * len);                         //设置热门推荐区轮播图片的总宽度
+      $('#galleryFrames img').width(oCol6_width);            // 设置每张轮播图片li的宽度
       // 设置轮播图显示第一张图片，偏移量为一张附属图宽度
       $oUl.css('left', - oCol6_width);
 
@@ -36,9 +36,9 @@ $(function() {
       // 轮播图滑动点对象点击事件
       $oDots.on('click','li',function(){
         $(this).addClass('slide-active').siblings().removeClass('slide-active');
-        var pageDiff =  $(this).text() - page; 								// 获取需要滚动的页数
-        page = $(this).text(); 				   											// 将当前点击也赋值给page变量
-        $oUl.animate({left:'-='+oCol6_width * pageDiff},300); // 滚动到当前点击页
+        var pageDiff =  $(this).text() - page;                 // 获取需要滚动的页数
+        page = $(this).text();                                 // 将当前点击也赋值给page变量
+        $oUl.animate({left:'-='+oCol6_width * pageDiff},300);  // 滚动到当前点击页
       });
       // 定时器，每5秒钟向右切换一张图片
       var timer = setInterval(function() {
@@ -81,12 +81,12 @@ $(function() {
     */
     var editorFeatured = (function(){
       var $oEditorScreen = $('#editorFeatured .screen-body'),  //获取编辑推荐区对象
-          page = 1,  									  											 //初始页码
-          $oLeft = $('#editorFeatured .slide-prev'),					 //获取左按钮
-          $oRight = $('#editorFeatured .slide-next'),					 //获取右按钮
-          oThumbnail = $('#editorFeatured .thumbnail'), 			 //获取音乐数量
-          len = oThumbnail.length,					  								 //即将编辑推荐区音乐总数
-          pageCount = Math.ceil(len / 4),               			 //即将编辑推荐区总页数
+          page = 1,                                            //初始页码
+          $oLeft = $('#editorFeatured .slide-prev'),           //获取左按钮
+          $oRight = $('#editorFeatured .slide-next'),          //获取右按钮
+          oThumbnail = $('#editorFeatured .thumbnail'),        //获取音乐数量
+          len = oThumbnail.length,                             //即将编辑推荐区音乐总数
+          pageCount = Math.ceil(len / 4),                      //即将编辑推荐区总页数
           // 每张海报的外边距及实际赋给每张海报内容宽度
           marginWidth = oThumbnail.outerWidth(true) - oThumbnail.outerWidth(),
           oThumbnailWidth =  (oCol6_width - marginWidth * 4) / 4;
@@ -137,7 +137,7 @@ $(function() {
               $oEditorScreen.animate({left:0},400);
             }else {
               page++;
-              $editorIndex.html(page);										// 设置显示当前音乐页码
+              $editorIndex.html(page);                    // 设置显示当前音乐页码
               $oEditorScreen.animate({left:'-='+oCol6_width},400);
             }
           // 向左移动
