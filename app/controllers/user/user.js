@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),                // 用户数据模型
@@ -11,13 +11,13 @@ exports.captcha = function(req,res) {
     return res.end('');
   }
   var ary = ccap.get();
-  captcha = ary[0];                                // 生成验证码
+  captcha = ary[0];                               // 生成验证码
   res.end(captcha);
 };
 
 /* 用户注册控制器 */
 exports.signup = function(req,res) {
-  var user = req.body.user,
+  var user = req.body.user,                       // 获取post请求中的用户数据
       _user = {};
   user = user.split('&');
   for(var i = 0; i < user.length; i++) {
@@ -62,13 +62,14 @@ exports.signup = function(req,res) {
 /* 用户注册页面渲染控制器 */
 exports.showSignup = function(req,res) {
   res.render('user/signup', {
-    title:'注册页面'
+    title:'注册页面',
+    logo:'movie'
   });
 };
 
 /* 用户登陆控制器 */
 exports.signin = function(req,res) {
-  var user = req.query.user || '',
+  var user = req.query.user || '',        // 获取get请求中的用户数据
       _user = {};
   user = user.split('&');
   for(var i = 0; i < user.length; i++) {
@@ -114,7 +115,8 @@ exports.signin = function(req,res) {
 /* 用户登录页面渲染控制器 */
 exports.showSignin = function(req,res)  {
   res.render('user/signin',{
-    title:'登录页面'
+    title:'登录页面',
+    logo:'movie'
   });
 };
 
@@ -138,25 +140,6 @@ exports.list = function(req,res) {
   });
 };
 
-/* 用户是否登陆判断控制器 */
-exports.signinRequired = function(req,res,next) {
-  var _user = req.session.user;
-  if(!_user) {
-    return res.redirect('/signin');
-  }
-  next();
-};
-
-/* 用户权限控制器 */
-exports.adminRequired = function(req,res,next) {
-  var _user = req.session.user;
-
-  if(_user && _user.role <= 10){
-    return res.redirect('/signin');
-  }
-    next();
-};
-
 /* 用户列表删除电影控制器 */
 exports.del = function(req,res) {
   // 获取客户端Ajax发送的URL值中的id值
@@ -170,4 +153,22 @@ exports.del = function(req,res) {
       res.json({success:1});              // 删除成功
     });
   }
+};
+
+/* 用户是否登陆判断中间件 */
+exports.signinRequired = function(req,res,next) {
+  var _user = req.session.user;
+  if(!_user) {
+    return res.redirect('/signin');
+  }
+  next();
+};
+
+/* 用户权限中间件 */
+exports.adminRequired = function(req,res,next) {
+  var _user = req.session.user;
+  if(_user && _user.role <= 10){
+    return res.redirect('/signin');
+  }
+    next();
 };
