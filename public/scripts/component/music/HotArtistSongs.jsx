@@ -3,24 +3,25 @@ import ReactDOM from 'react-dom';
 import TitleTop from './TitleTop.jsx';
 
 /* 本周单曲榜整体区域组件 */
-export class HotArtistSongs extends React.Component {
+class HotArtistSongs extends React.Component {
   constructor() {
     super();
     this.state = {
-      selected: '最热',
-      loading: true,
-      data: []
+      titleTop: ['最热','摇滚','民谣','流行','电子'],    // 标题
+      selected: '最热',                               // 当前选择的标题值 
+      loading: true,                                 // 判断数据是否加载完成
+      data: [],                                      // 该区域全部数据
+      currentData: {}                                // 当前显示数据
     }
   }
   render() {
-    let artistList = [],
-        titleTop = ['最热','摇滚','民谣','流行','电子'];
+    let artistList = [];
     if(!this.state.loading) {
-      let data = this.state.data;
-      if (data && data.musics) {
-        for(let i = 0,len = data.musics.length; i < Math.min(10,len); i++){
+      let currentData = this.state.currentData;
+      if (currentData && currentData.musics) {
+        for(let i = 0; i < currentData.musics.length; i++) {
           artistList.push(
-            <SongItem data={data.musics[i]} key={i} value={i+1} />
+            <SongItem data={currentData.musics[i]} key={currentData.musics[i]._id} value={i+1} />
           );
         }
       }
@@ -35,7 +36,7 @@ export class HotArtistSongs extends React.Component {
           </button>
         </div>
         <div className="billboard-bd class-top">
-          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
+          <TitleTop titleTop={this.state.titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
         </div>
         <div className="hotArtist-songs">
           <ul>
@@ -50,20 +51,34 @@ export class HotArtistSongs extends React.Component {
     this.getData(value);
   }
   getData(value) {
+    // 判断data数组中是否已有该标题对应的数据，如果有则将该值赋给currentData并返回
+    for(let item of this.state.data) {
+      let index = item.name.indexOf(value);
+      if(index !== -1) {
+        this.setState({
+          loading: false,
+          selected: value,
+          currentData: item
+        });
+        return;
+      }
+    }
+    // 如果data中没有该数据则通过Ajax请求并保存
     let url = this.props.source + encodeURIComponent('本周单曲榜' + value);
     $.get(url, (results) => {
       this.setState({
         loading: false,
         selected: value,
-        data: results.data
+        currentData: results.data
       });
+      this.state.data.push(results.data);                 // 将新返回的数据添加到数组中
     });
   }
 }
 /* 本周单曲榜整体区域组件--End */
 
 /* 新碟榜展示内容组件 */
-export class SongItem extends React.Component {
+class SongItem extends React.Component {
   render() {
     return (
       <li>
@@ -81,3 +96,5 @@ export class SongItem extends React.Component {
 
 ReactDOM.render(<HotArtistSongs source='/musicindex?hotSongs=' />,
                 document.getElementById('hotArtistSongs'));
+
+module.exports = {HotArtistSongs,SongItem};

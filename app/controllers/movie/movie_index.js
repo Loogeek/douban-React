@@ -48,8 +48,7 @@ exports.index = function(req,res){
       .findOne({name:_fliterName})
       .populate({
         path:'movies',
-        select:'title poster',
-        option:{limit:6}                  //限制最多6条数据
+        select:'title poster'
       })
       .exec(function(err,category){
         if(err){
@@ -63,8 +62,7 @@ exports.index = function(req,res){
       .findOne({name:_galleryName})
       .populate({
         path:'movies',
-        select:'title poster',
-        option:{limit:6}                  //限制最多6条数据
+        select:'title poster'
       })
       .exec(function(err,category) {
         if(err){
@@ -78,8 +76,7 @@ exports.index = function(req,res){
       .find({})
       .populate({
         path:'movies',
-        select:'title poster',
-        option:{limit:6}                   //限制最多6条数据
+        select:'title poster'
       })
       .exec(function(err,categories) {
         if(err){

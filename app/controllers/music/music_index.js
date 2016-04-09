@@ -13,6 +13,7 @@ exports.index = function(req,res) {
   var albumName = req.query.albumName,              		// 获取新碟榜区分类请求名称
       hotProName = req.query.hotProName,             		// 获取近期热门歌单分类请求名称
       hotSongs = req.query.hotSongs;                 		// 获取本周单曲榜区分类请求名称
+
   // 如果是新碟榜部分发送Ajax请求
   if(albumName) {
     MusicCategory
@@ -20,6 +21,7 @@ exports.index = function(req,res) {
       .populate({
         path:'musics',
         select:'title image singer',
+        options:{limit:8}                               //限制最多8条数据
       })
       .exec(function(err,musicCategory) {
         if(err){
@@ -33,7 +35,8 @@ exports.index = function(req,res) {
       .findOne({name:hotProName})
       .populate({
         path:'musicCategories',
-        select:'name musics'
+        select:'name musics',
+        options:{limit:6}                               //限制最多6条数据
       })
       .exec(function(err,programme) {
         if(err){
@@ -44,13 +47,14 @@ exports.index = function(req,res) {
           var musicCategories = programme.musicCategories,
               dataMusics = [],
               count = 0,
-              len = musicCategories.length;
+              len = Math.min(6,musicCategories.length);    // 该榜单最多显示6个歌曲分类
           for(var i = 0; i < len; i++) {
             MusicCategory
               .findOne({_id:musicCategories[i]._id})
               .populate({
                 path:'musics',
                 select:'title image',
+                options:{limit:3}                               //限制最多3条数据
               })
               .exec(function(err,musics) {
                 count ++;
@@ -59,7 +63,7 @@ exports.index = function(req,res) {
                 }
                 dataMusics.push(musics);
                 if(count === len){
-                  res.json({data:dataMusics,dataPro:programme});
+                  res.json({dataPro:programme,data:dataMusics});
                 }
               });
           }
@@ -74,6 +78,7 @@ exports.index = function(req,res) {
       .populate({
         path:'musics',
         select:'title image singer pv',
+        options:{limit:10}                               //限制最多10条数据
       })
       .exec(function(err,musicCategory){
         if(err){
@@ -107,7 +112,8 @@ exports.index = function(req,res) {
           .find({})
           .populate({
             path:'musicCategories',
-            select:'name musics'
+            select:'name musics',
+            options:{limit:8}                               //限制最多8条数据
           })
           .exec(function(err,programmes) {
             if(err){

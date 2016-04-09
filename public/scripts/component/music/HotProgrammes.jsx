@@ -3,27 +3,30 @@ import ReactDOM from 'react-dom';
 import TitleTop from './TitleTop.jsx';
 
 /* 近期热门歌单分类组件 */
-export class HotProgrammes extends React.Component {
+class HotProgrammes extends React.Component {
   constructor() {
     super();
     this.state = {
+      titleTop: ['最热','流行','摇滚','民谣','原生'],
       selected: '最热',
       loading: true,
       data: [],
-      dataPro: null
+      currentData: {},                                // 当前显示数据
+      dataPro: [],
+      index: 0
     }
   }
   render() {
-    let programmeList = [],
-        titleTop = ['最热','流行','摇滚','民谣','原生'];
+    let programmeList = [];
     if(!this.state.loading) {
-      let dataCars = this.state.data;
-      if (dataCars) {
-        var titleMore = "/music/results?pro="+ this.state.dataPro._id +"&p=0";
-        for(let i = 0,len = dataCars.length; i < Math.min(6,len); i++){
+      let currentData = this.state.currentData;
+      console.log(this.state.dataPro);
+      if (currentData) {
+        var titleMore = "/music/results?pro="+ this.state.dataPro[this.state.index]._id +"&p=0";
+        for(let item of currentData) {
           programmeList.push(
-            <ProgrammeItem dataCars={dataCars[i]} key={i} />
-          )
+            <ProgrammeItem dataCars={item} key={item._id} />
+          );
         }
       }
     }
@@ -31,7 +34,7 @@ export class HotProgrammes extends React.Component {
       <div>
         <div className="class-top">
           <span>近期热门歌单</span>
-          <TitleTop titleTop={titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
+          <TitleTop titleTop={this.state.titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
           <a href={titleMore} target="_blank" className="more">更多</a>
         </div>
         <div className="screen">
@@ -47,13 +50,30 @@ export class HotProgrammes extends React.Component {
     this.getData(value);
   }
   getData(value) {
+    // 判断dataPro数组中是否已有该标题对应的数据，如果有则将该值赋给currentData并返回
+    let dataPro = this.state.dataPro;
+    for(let i = 0; i < dataPro.length; i++) {
+      let index = dataPro[i].name.indexOf(value);
+      if(index !== -1) {
+        this.setState({
+          loading: false,
+          selected: value,
+          currentData: this.state.data[i],
+          index: i
+        });
+        return;
+      }
+    }
+    // 如果data中没有该数据则通过Ajax请求并保存
     let url = this.props.source + encodeURIComponent('近期热门歌单' + value);
     $.get(url, (results) => {
+      this.state.dataPro.push(results.dataPro);
+      this.state.data.push(results.data);                // 将新返回的数据添加到数组中
       this.setState({
         loading: false,
         selected: value,
-        data: results.data,
-        dataPro: results.dataPro
+        currentData: results.data,
+        index: (this.state.dataPro.length - 1)
       });
     });
   }
@@ -61,11 +81,11 @@ export class HotProgrammes extends React.Component {
 /* 近期热门歌单分类组件--End */
 
 /* 近期热门歌单每个分类中的歌单组件 */
-export class ProgrammeItem extends React.Component {
+class ProgrammeItem extends React.Component {
   render() {
     let dataMusics = this.props.dataCars.musics,
         arrList = [];
-    for(let i = 0,len = dataMusics.length; i < Math.min(3,len); i++) {
+    for(let i = 0,len = dataMusics.length; i < len; i++) {
       arrList.push(
         <a key={i} href={'/music/' + dataMusics[i]._id} target="_blank" title={dataMusics[i].title}>
           <p key={i}>{i + 1 + '.' + dataMusics[i].title}</p>
@@ -94,3 +114,5 @@ export class ProgrammeItem extends React.Component {
 
 ReactDOM.render(<HotProgrammes source='/musicindex?hotProName=' />,
                 document.getElementById('hotProgrammes'));
+
+module.exports = {HotProgrammes,ProgrammeItem};

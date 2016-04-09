@@ -2,22 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 /* 选电影/选电视剧区域整体组件 */
-export class FliterMovies extends React.Component {
+class FliterMovies extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      filmTitle: ['热门','最新','经典','豆瓣高分','冷片佳作','华语','欧美','韩国','日本','动作','喜剧'],
       selected: '热门',
       loading: true,
       data: [],
-      filmTitle: ['热门','最新','经典','豆瓣高分','冷片佳作','华语','欧美','韩国','日本','动作','喜剧']
+      currentData: {}
     }
   }
   render() {
     let filmList = [];
     if(!this.state.loading) {
-      let data = this.state.data;
-      if (data && data.movies) {
-        data.movies.forEach((movieItem, index) => {
+      let currentData = this.state.currentData;
+      if (currentData && currentData.movies) {
+        currentData.movies.forEach((movieItem, index) => {
           filmList.push(
             <FliterMovieItem data = {movieItem} key = {index} />
           );
@@ -50,20 +51,36 @@ export class FliterMovies extends React.Component {
     this.getData(value);
   }
   getData(value) {
+    // 判断data数组中是否已有该标题对应的数据，如果有则将该值赋给currentData并返回
+    for(let item of this.state.data) {
+      if(item) {
+        let index = item.name.indexOf(value);
+        if(index !== -1) {
+          this.setState({
+            loading: false,
+            selected: value,
+            currentData: item
+          });
+          return;
+        }
+      }
+    }
+    // 如果data中没有该数据则通过Ajax请求并保存
     let url = this.props.source + encodeURIComponent(value + '电影');
     $.get(url, (results) => {
       this.setState({
         loading: false,
         selected: value,
-        data: results.data
+        currentData: results.data
       });
+      this.state.data.push(results.data);                // 将新返回的数据添加到数组中
     });
   }
 }
 /* 选电影/选电视剧区域整体组件--End */
 
 /* 选电影/选电视剧内容组件 */
-export class FliterMovieItem extends React.Component {
+class FliterMovieItem extends React.Component {
   render() {
     return (
       <div className = "col-md-3 col-xs-4">
@@ -82,7 +99,7 @@ export class FliterMovieItem extends React.Component {
 /* 选电影/选电视剧内容组件--End */
 
 /* 选电影/选电视剧标题组件 */
-export class FliterTitle extends React.Component {
+class FliterTitle extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -119,3 +136,5 @@ export class FliterTitle extends React.Component {
 /* 添加选电影/选电视组件到节点中 */
 ReactDOM.render(<FliterMovies source = '/?fliterName=' />,
                 document.getElementById('fliterMovies'));
+
+module.exports = {FliterMovies,FliterMovieItem,FliterTitle};
