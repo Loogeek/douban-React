@@ -8,14 +8,14 @@ var webpack = require('webpack'),
 module.exports = {
   entry: {
     'movieBundle': [
-      './public/scripts/component/movie/movie_index'      // 引入电影首页JS脚本
+      './public/scripts/components/movie/movie_index'      // 引入电影首页JS脚本
     ],
     'musicBundle': [
-      './public/scripts/component/music/music_index'      // 引入音乐首页JS脚本
+      './public/scripts/components/music/music_index'      // 引入音乐首页JS脚本
     ]
   },
   output: {
-    path: path.join(__dirname, '/public/libs/scripts/component/'),  // 输出JS路径
+    path: path.join(__dirname, '/public/libs/scripts/components/'),  // 输出JS路径
     filename: '[name].min.js'
   },
   module: {

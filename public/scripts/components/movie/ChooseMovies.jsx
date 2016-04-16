@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ChooseMovieItem from './ChooseMovieItem';
+import ChooseMovieTitle from './ChooseMovieTitle';
 
 /* 选电影/选电视剧区域整体组件 */
-class FliterMovies extends React.Component {
-  constructor(props) {
-    super(props);
+class ChooseMovies extends React.Component {
+  constructor() {
+    super();
     this.state = {
-      filmTitle: ['热门','最新','经典','豆瓣高分','冷片佳作','华语','欧美','韩国','日本','动作','喜剧'],
+      filmTitle: ['热门','最新','经典','豆瓣高分','冷门佳片','华语','欧美','韩国'],
       selected: '热门',
       loading: true,
       data: [],
@@ -20,7 +22,7 @@ class FliterMovies extends React.Component {
       if (currentData && currentData.movies) {
         currentData.movies.forEach((movieItem, index) => {
           filmList.push(
-            <FliterMovieItem data = {movieItem} key = {index} />
+            <ChooseMovieItem data = {movieItem} key = {index} />
           );
         });
       }
@@ -32,7 +34,7 @@ class FliterMovies extends React.Component {
           <i>&nbsp;/&nbsp;</i>
           <span>选电视剧</span>
           <hr />
-          <FliterTitle filmTitle = {this.state.filmTitle} selected = {this.state.selected}
+          <ChooseMovieTitle filmTitle = {this.state.filmTitle} selected = {this.state.selected}
             onDataChange = {e => this.getData(e)}/>
           <hr />
         </div>
@@ -79,62 +81,8 @@ class FliterMovies extends React.Component {
 }
 /* 选电影/选电视剧区域整体组件--End */
 
-/* 选电影/选电视剧内容组件 */
-class FliterMovieItem extends React.Component {
-  render() {
-    return (
-      <div className = "col-md-3 col-xs-4">
-        <div className = "thumbnail">
-          <a href = {/movie/ + this.props.data._id} target = "_blank">
-            <img src = {this.props.data.poster} alt = {this.props.data.title} />
-          </a>
-          <div className = "caption">
-            <h5>{this.props.data.title}</h5>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-/* 选电影/选电视剧内容组件--End */
-
-/* 选电影/选电视剧标题组件 */
-class FliterTitle extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    let titleSeleted = this.props.selected,       // 获取父组件中初始选取的标题
-        filmTitle = this.props.filmTitle,          // 获取父组件全部标题名称
-        titleList = [];
-
-    filmTitle.forEach((filmItem, index) => {
-      titleList.push(
-        <li key = {index}>
-          <button
-            className = {titleSeleted === filmItem ? 'btn btn-primary' : 'btn btn-default'}
-            key = {index} onClick = {e => this.handleTitleChang(filmItem)}>
-            {filmItem}
-          </button>
-        </li>
-      );
-    });
-    return (
-      <ul>
-        {titleList}
-      </ul>
-    );
-  }
-  handleTitleChang(titleName) {
-    if(this.props.selected !== titleName) {
-      this.props.onDataChange(titleName);
-    }
-  }
-}
-/* 选电影/选电视剧标题组件--End */
-
 /* 添加选电影/选电视组件到节点中 */
-ReactDOM.render(<FliterMovies source = '/?fliterName=' />,
+ReactDOM.render(<ChooseMovies source = '/?fliterName=' />,
                 document.getElementById('fliterMovies'));
 
-module.exports = {FliterMovies,FliterMovieItem,FliterTitle};
+module.exports = ChooseMovies;

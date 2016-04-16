@@ -47,14 +47,14 @@ exports.index = function(req,res) {
           var musicCategories = programme.musicCategories,
               dataMusics = [],
               count = 0,
-              len = Math.min(6,musicCategories.length);    // 该榜单最多显示6个歌曲分类
+              len = musicCategories.length;    
           for(var i = 0; i < len; i++) {
             MusicCategory
               .findOne({_id:musicCategories[i]._id})
               .populate({
                 path:'musics',
                 select:'title image',
-                options:{limit:3}                               //限制最多3条数据
+                options:{limit:3}                            // 限制最多3条数据
               })
               .exec(function(err,musics) {
                 count ++;
@@ -78,7 +78,7 @@ exports.index = function(req,res) {
       .populate({
         path:'musics',
         select:'title image singer pv',
-        options:{limit:10}                               //限制最多10条数据
+        options:{limit:10}                               // 限制最多10条数据
       })
       .exec(function(err,musicCategory){
         if(err){
@@ -92,7 +92,7 @@ exports.index = function(req,res) {
     var newPath = path.join(__dirname,'../../../public/libs/images/music/gallery'),
         dirList = fs.readdirSync(newPath),
         fileList = [],
-        reg = /^(.+)\.(jpg|bmp|gif|png)$/i;  // 通过正则匹配图片
+        reg = /^(.+)\.(jpg|bmp|gif|png)$/i;             // 通过正则匹配图片
 
     dirList.forEach(function(item) {
       if(reg.test(item)){
@@ -113,7 +113,7 @@ exports.index = function(req,res) {
           .populate({
             path:'musicCategories',
             select:'name musics',
-            options:{limit:8}                               //限制最多8条数据
+            options:{limit:8}                           // 限制最多8条数据
           })
           .exec(function(err,programmes) {
             if(err){

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TitleTop from './TitleTop.jsx';
+import ArtistSongItem from './ArtistSongItem';
+import Title from './Title';
 
 /* 本周单曲榜整体区域组件 */
 class HotArtistSongs extends React.Component {
@@ -8,7 +9,7 @@ class HotArtistSongs extends React.Component {
     super();
     this.state = {
       titleTop: ['最热','摇滚','民谣','流行','电子'],    // 标题
-      selected: '最热',                               // 当前选择的标题值 
+      selected: '最热',                               // 当前选择的标题值
       loading: true,                                 // 判断数据是否加载完成
       data: [],                                      // 该区域全部数据
       currentData: {}                                // 当前显示数据
@@ -21,7 +22,7 @@ class HotArtistSongs extends React.Component {
       if (currentData && currentData.musics) {
         for(let i = 0; i < currentData.musics.length; i++) {
           artistList.push(
-            <SongItem data={currentData.musics[i]} key={currentData.musics[i]._id} value={i+1} />
+            <ArtistSongItem data={currentData.musics[i]} key={currentData.musics[i]._id} value={i+1} />
           );
         }
       }
@@ -36,7 +37,7 @@ class HotArtistSongs extends React.Component {
           </button>
         </div>
         <div className="billboard-bd class-top">
-          <TitleTop titleTop={this.state.titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
+          <Title titleTop={this.state.titleTop} selected={this.state.selected} onDataChange={e => this.getData(e)} />
         </div>
         <div className="hotArtist-songs">
           <ul>
@@ -77,24 +78,7 @@ class HotArtistSongs extends React.Component {
 }
 /* 本周单曲榜整体区域组件--End */
 
-/* 新碟榜展示内容组件 */
-class SongItem extends React.Component {
-  render() {
-    return (
-      <li>
-        <a href={'/music/' +this.props.data._id} target="_blank">
-          <img src={this.props.data.image}  alt={this.props.data.title} />
-          <h5>{this.props.data.title}</h5>
-          <p>{this.props.data.singer}</p>
-          <span className="order">{this.props.value}</span>
-        </a>
-      </li>
-    );
-  }
-}
-/* 新碟榜展示内容组件--End */
-
 ReactDOM.render(<HotArtistSongs source='/musicindex?hotSongs=' />,
                 document.getElementById('hotArtistSongs'));
 
-module.exports = {HotArtistSongs,SongItem};
+module.exports = HotArtistSongs;

@@ -1,6 +1,6 @@
 "use strict";
 import NewAlbums from './NewAlbums';          					// 引入新碟榜React组件
-import HotArtistSongs from './HotArtistSongs';					// 引入本周单曲榜组件
+import ArtistSongs from './ArtistSongs';  		    			// 引入本周单曲榜组件
 import HotProgrammes from './HotProgrammes';  					// 引入近期热门歌单组件
 
 $.support.cors = true;                                  // 解决IE8/9 Ajax跨域请求问题
@@ -8,7 +8,7 @@ $.support.cors = true;                                  // 解决IE8/9 Ajax跨�
 $(function() {
   // 音乐主页函数
   var musicIndexFun = (function() {
-    var oCol6_width = $('.col-md-6').width();  //获取主页左边区域布局对象
+    var oCol6_width = $('.col-md-6').width();           //获取主页左边区域布局对象
     /*
       顶部轮播图区 #galleryFrames
     */

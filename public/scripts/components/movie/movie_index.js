@@ -1,6 +1,6 @@
 "use strict";
 
-import FliterMovies from './FliterMovies';							// 引入选电影/选电视剧React组件
+import ChooseMovies from './ChooseMovies';							// 引入选电影/选电视剧React组件
 
 $.support.cors = true;                                  // 解决IE8/9 Ajax跨域请求问题
 
@@ -246,7 +246,7 @@ $(function() {
         var index = $(this).attr('index');                  // 当前选择的是哪个范围城市
         $(this).addClass('on').siblings().removeClass('on');// 城市头部添加样式
         $cList.find('.cities-list-item').eq(index-1).addClass('active')
-            .siblings().removeClass('active');    // 添加active样式，让其点击范围的城市显示
+            .siblings().removeClass('active');              // 添加active样式，让其点击范围的城市显示
       });
 
       // 切换当前城市事件
@@ -259,7 +259,7 @@ $(function() {
       // 电影院搜索框获得焦点时发送Ajax请求该城市的电影院
       $citySugInput.on('focus',function() {
         funGetCityCinemas();
-        $cList.css('display','none');            // 当电影院搜索框获得焦点时要隐藏城市列表框
+        $cList.css('display','none');                       // 当电影院搜索框获得焦点时要隐藏城市列表框
       });
 
       // 当电影院搜索框中监听到键盘事件时将输入的影院名称发送给服务器
@@ -285,7 +285,7 @@ $(function() {
         // 发送Ajax请求
         funAjax(URL,'GET',function(results) {
           var data = results || [];
-          $cityTip.html('');                      // 每次添加影院列表前先清空电影院列表，避免叠加
+          $cityTip.html('');                                  // 每次添加影院列表前先清空电影院列表，避免叠加
           for(var i = 0;i < data.length; i++) {
             $cityTip.append('<li><a href="javascript:;">' + data[i] + '</a></li>');
           }
