@@ -47,7 +47,7 @@ exports.index = function(req,res) {
           var musicCategories = programme.musicCategories,
               dataMusics = [],
               count = 0,
-              len = musicCategories.length;    
+              len = musicCategories.length;
           for(var i = 0; i < len; i++) {
             MusicCategory
               .findOne({_id:musicCategories[i]._id})
@@ -107,13 +107,12 @@ exports.index = function(req,res) {
         if(err){
           console.log(err);
         }
-        //近期热门歌单区域歌曲分类查找
+        // 歌单区域歌曲分类查找
         Programme
           .find({})
           .populate({
             path:'musicCategories',
             select:'name musics',
-            options:{limit:8}                           // 限制最多8条数据
           })
           .exec(function(err,programmes) {
             if(err){
@@ -121,10 +120,10 @@ exports.index = function(req,res) {
             }
             res.render('music/music_index',{
               title:'豆瓣音乐首页',
-              logo:'music',
-              musicCategories:musicCategories,
-              programmes:programmes,
-              fileList:fileList
+              logo:'music',                         // 显示音乐logo
+              musicCategories:musicCategories,      // 返回查询到的全部歌曲分类
+              programmes:programmes,                // 返回查询到的近期热门歌单数量
+              fileList:fileList                     // 首页轮播图图片数量
             });
           });
       });
@@ -133,13 +132,13 @@ exports.index = function(req,res) {
 
 /* 音乐分类及音乐搜索 */
 exports.search = function(req,res) {
-  var catId = req.query.cat || '',          // 获取音乐分类更多查询串ID
-      proId = req.query.pro || '',          // 近期热门歌单部分更多查询串ID
-      q = req.query.q || '',                // 获取搜索框提交内容
-      page = req.query.p || 0,              // 获取页面
+  var catId = req.query.cat || '',                  // 获取音乐分类更多查询串ID
+      proId = req.query.pro || '',                  // 近期热门歌单部分更多查询串ID
+      q = req.query.q || '',                        // 获取搜索框提交内容
+      page = parseInt(req.query.p, 10) || 0,        // 获取页面
       count = 6,
-      index = page * count;                 // 每页展示6条数据
-  page = parseInt(req.query.p, 10) || 0;
+      index = page * count;                         // 每页展示6条数据
+
   // 如果包含catId，则是点击了相应的音乐分类标题，进入results页面显示相应音乐分类的音乐
   if(catId) {
     // 音乐分类功能

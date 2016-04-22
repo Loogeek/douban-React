@@ -55,16 +55,13 @@ class ChooseMovies extends React.Component {
   getData(value) {
     // 判断data数组中是否已有该标题对应的数据，如果有则将该值赋给currentData并返回
     for(let item of this.state.data) {
-      if(item) {
-        let index = item.name.indexOf(value);
-        if(index !== -1) {
-          this.setState({
-            loading: false,
-            selected: value,
-            currentData: item
-          });
-          return;
-        }
+      if (item.name.includes(value)) {
+        this.setState({
+          loading: false,
+          selected: value,
+          currentData: item
+        });
+        return;
       }
     }
     // 如果data中没有该数据则通过Ajax请求并保存

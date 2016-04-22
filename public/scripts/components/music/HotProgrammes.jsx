@@ -53,8 +53,7 @@ class HotProgrammes extends React.Component {
     // 判断dataPro数组中是否已有该标题对应的数据，如果有则将该值赋给currentData并返回
     let dataPro = this.state.dataPro;
     for(let i = 0; i < dataPro.length; i++) {
-      let index = dataPro[i].name.indexOf(value);
-      if(index !== -1) {
+      if (dataPro[i].name.includes(value)) {
         this.setState({
           loading: false,
           selected: value,
